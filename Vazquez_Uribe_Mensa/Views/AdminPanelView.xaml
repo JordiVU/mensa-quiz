@@ -1,0 +1,374 @@
+﻿<UserControl x:Class="Vazquez_Uribe_Mensa.Views.AdminPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="768" d:DesignWidth="1106">
+
+    <UserControl.Resources>
+        <FontFamily x:Key="IconFont">Segoe MDL2 Assets, Segoe UI Symbol</FontFamily>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="OrangeButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF9800"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F57C00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GrayButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#E5E7EB"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#D1D5DB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PasswordInputStyle" TargetType="PasswordBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F3F4F6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="#F8F9FA" Padding="40">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- cabecera -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,30">
+                <TextBlock Text="Panel de Administración" FontSize="28"
+                           FontWeight="SemiBold" Foreground="Black" Margin="0,0,0,5"/>
+                <TextBlock Text="Gestiona los usuarios del sistema"
+                           FontSize="18" Foreground="#6B7280"/>
+            </StackPanel>
+
+            <!-- formulario -->
+            <Border Grid.Row="1" Background="White" BorderBrush="#E5E7EB" BorderThickness="1"
+                    CornerRadius="8" Padding="30" Margin="0,0,0,25">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.03" BlurRadius="10" ShadowDepth="2"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="{Binding TituloFormulario}" FontSize="16"
+                               FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Username -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Username *" Style="{StaticResource LabelStyle}"/>
+                            <TextBox Style="{StaticResource InputStyle}"
+                                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+
+                        <!-- Password -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Style="{StaticResource LabelStyle}">
+                                <Run Text="Contraseña"/>
+                                <Run Text=" (dejar vacío para no cambiar)" Foreground="#9CA3AF"
+                                     FontWeight="Normal">
+                                    <Run.Style>
+                                        <Style TargetType="Run">
+                                            <Setter Property="Foreground" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding EstaEditando}" Value="True">
+                                                    <Setter Property="Foreground" Value="#9CA3AF"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Run.Style>
+                                </Run>
+                            </TextBlock>
+                            <PasswordBox x:Name="PasswordInput"
+                                         Style="{StaticResource PasswordInputStyle}"/>
+                        </StackPanel>
+
+                        <!-- Rol -->
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Rol *" Style="{StaticResource LabelStyle}"/>
+                            <ComboBox ItemsSource="{Binding Roles}"
+                                      SelectedItem="{Binding Role}"
+                                      FontSize="15" Padding="10,10"
+                                      BorderBrush="#D1D5DB"/>
+                        </StackPanel>
+
+                        <!-- Botones -->
+                        <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <Button Style="{StaticResource GrayButtonStyle}" Width="100"
+                                    Margin="0,0,10,0" Command="{Binding CancelarCommand}">
+                                Cancelar
+                            </Button>
+                            <Button Style="{StaticResource OrangeButtonStyle}" Width="130"
+                                    Command="{Binding GuardarCommand}"
+                                    CommandParameter="{Binding ElementName=PasswordInput}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE74E;"
+                                               Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="Crear"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding EstaEditando}" Value="True">
+                                                        <Setter Property="Text" Value="Guardar"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- lista usuarios -->
+            <Border Grid.Row="2" Background="White" BorderBrush="#E5E7EB" BorderThickness="1"
+                    CornerRadius="8" Padding="20">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.03" BlurRadius="10" ShadowDepth="2"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- cabecera tabla -->
+                    <Grid Grid.Row="0" Margin="15,0,15,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Usuario" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Grid.Column="1" Text="Rol" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Grid.Column="2" Text="Activo" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Grid.Column="3" Text="Creado" Style="{StaticResource LabelStyle}"/>
+                        <TextBlock Grid.Column="4" Text="Acciones" Style="{StaticResource LabelStyle}"/>
+                    </Grid>
+
+                    <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="#E5E7EB"/>
+
+                    <!-- filas -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Usuarios}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#F3F4F6" BorderThickness="0,0,0,1" Padding="15,12">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="80"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- username -->
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                <Border Background="#FFF8E1" CornerRadius="20"
+                                                        Width="36" Height="36" Margin="0,0,12,0">
+                                                    <TextBlock Foreground="#FF9800" FontWeight="Bold"
+                                                               FontSize="14" HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center">
+                                                        <Run Text="{Binding Username[0], Mode=OneWay}"/>
+                                                    </TextBlock>
+                                                </Border>
+                                                <TextBlock Text="{Binding Username}" FontSize="15"
+                                                           FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                            </StackPanel>
+
+                                            <!-- rol -->
+                                            <Border Grid.Column="1" VerticalAlignment="Center"
+                                                    CornerRadius="4" Padding="8,4" HorizontalAlignment="Left">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#EFF6FF"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Role}" Value="Admin">
+                                                                <Setter Property="Background" Value="#FFF8E1"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Role}" FontSize="13" FontWeight="SemiBold">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="#3B82F6"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Role}" Value="Admin">
+                                                                    <Setter Property="Foreground" Value="#FF9800"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+
+                                            <!-- activo -->
+                                            <TextBlock Grid.Column="2" VerticalAlignment="Center" FontSize="14">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="✗"/>
+                                                        <Setter Property="Foreground" Value="#EF4444"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                                <Setter Property="Text" Value="✓"/>
+                                                                <Setter Property="Foreground" Value="#10B981"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!-- fecha -->
+                                            <TextBlock Grid.Column="3" VerticalAlignment="Center"
+                                                       Foreground="#6B7280" FontSize="13">
+                                                <Run Text="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy}, Mode=OneWay}"/>
+                                            </TextBlock>
+
+                                            <!-- acciones -->
+                                            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                                <Button Style="{StaticResource IconButtonStyle}"
+                                                        Command="{Binding DataContext.EditarUsuarioCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
+                                                    <TextBlock FontFamily="{StaticResource IconFont}"
+                                                               Text="&#xE70F;" Foreground="#FF9800" FontSize="16"/>
+                                                </Button>
+                                                <Button Style="{StaticResource IconButtonStyle}"
+                                                        Command="{Binding DataContext.EliminarUsuarioCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
+                                                    <TextBlock FontFamily="{StaticResource IconFont}"
+                                                               Text="&#xE74D;" Foreground="#EF4444" FontSize="16"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

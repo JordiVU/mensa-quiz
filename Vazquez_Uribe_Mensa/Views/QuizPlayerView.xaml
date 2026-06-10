@@ -1,0 +1,278 @@
+﻿<UserControl x:Class="Vazquez_Uribe_Mensa.Views.QuizPlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="768" d:DesignWidth="1106">
+
+    <UserControl.Resources>
+        <FontFamily x:Key="IconFont">Segoe MDL2 Assets, Segoe UI Symbol</FontFamily>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="OrangeButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF9800"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="30,15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F57C00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="#0D111F">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- barra progreso -->
+            <Grid Grid.Row="0" Background="#111827" Margin="0,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Grid.Column="0" Height="6" Margin="20,15"
+                             Background="#1F2937" Foreground="#FF9800"
+                             Minimum="0" Maximum="{Binding TotalPreguntas}"
+                             Value="{Binding NumeroPreguntaActual}"/>
+                <TextBlock Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
+                           Foreground="#9CA3AF" FontSize="14">
+                    <Run Text="{Binding NumeroPreguntaActual, Mode=OneWay}"/>
+                    <Run Text=" / "/>
+                    <Run Text="{Binding TotalPreguntas, Mode=OneWay}"/>
+                </TextBlock>
+            </Grid>
+
+            <!-- contenido pregunta -->
+            <Grid Grid.Row="1" Margin="60,40">
+
+                <!-- PAUSA -->
+                <StackPanel Visibility="{Binding EsPausa, Converter={StaticResource BoolToVis}}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding PreguntaActual.Content}"
+                               FontSize="48" FontWeight="Bold" Foreground="White"
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding PreguntaActual.QuestionOptions[0].Text}"
+                               FontSize="24" Foreground="#9CA3AF"
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               TextWrapping="Wrap" Margin="0,20,0,0"/>
+                </StackPanel>
+
+                <!-- LIBRE -->
+                <StackPanel Visibility="{Binding EsLibre, Converter={StaticResource BoolToVis}}"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding PreguntaActual.Content}"
+                               FontSize="36" FontWeight="Bold" Foreground="White"
+                               TextAlignment="Center" TextWrapping="Wrap"
+                               HorizontalAlignment="Center" Margin="0,0,0,40"/>
+                    <Border Background="#1F2937" CornerRadius="8" Padding="30" MaxWidth="600"
+                            HorizontalAlignment="Center">
+                        <TextBlock Text="Respuesta abierta — los participantes responden en voz alta"
+                                   Foreground="#9CA3AF" FontSize="16" TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- MULTIPLE -->
+                <Grid Visibility="{Binding EsMultiple, Converter={StaticResource BoolToVis}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{Binding PreguntaActual.Content}"
+                               FontSize="32" FontWeight="Bold" Foreground="White"
+                               TextAlignment="Center" TextWrapping="Wrap"
+                               HorizontalAlignment="Center" Margin="0,0,0,40"/>
+
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding PreguntaActual.QuestionOptions}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" Rows="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="10" CornerRadius="8" Padding="20">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1F2937"/>
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsCorrect}" Value="True"/>
+                                                        <Condition Binding="{Binding DataContext.MostrandoRespuesta,
+                                                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                   Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background" Value="#065F46"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding Text}" Foreground="White"
+                                               FontSize="20" TextWrapping="Wrap"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               TextAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+                <!-- ORDENAR -->
+                <Grid Visibility="{Binding EsOrdenar, Converter={StaticResource BoolToVis}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{Binding PreguntaActual.Content}"
+                               FontSize="32" FontWeight="Bold" Foreground="White"
+                               TextAlignment="Center" TextWrapping="Wrap"
+                               HorizontalAlignment="Center" Margin="0,0,0,30"/>
+
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding PreguntaActual.QuestionOptions}"
+                                  HorizontalAlignment="Center" MaxWidth="600">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,10" CornerRadius="8" Padding="20">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1F2937"/>
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding DataContext.MostrandoRespuesta,
+                                                                   RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                   Value="True"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background" Value="#065F46"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock Text="{Binding Text}" Foreground="White"
+                                                   FontSize="18" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+                <!-- EMPAREJAR -->
+                <Grid Visibility="{Binding EsEmparejar, Converter={StaticResource BoolToVis}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{Binding PreguntaActual.Content}"
+               FontSize="32" FontWeight="Bold" Foreground="White"
+               TextAlignment="Center" TextWrapping="Wrap"
+               HorizontalAlignment="Center" Margin="0,0,0,30"/>
+
+                    <Grid Grid.Row="1" HorizontalAlignment="Center" MaxWidth="700">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Izquierda — términos -->
+                        <ItemsControl Grid.Column="0" ItemsSource="{Binding OpcionesEmparejarIzquierda}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1F2937" CornerRadius="8" Padding="20" Margin="0,0,0,10">
+                                        <TextBlock Text="{Binding Text}" Foreground="White"
+                                   FontSize="18" TextAlignment="Center"
+                                   TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Flechas centro -->
+                        <ItemsControl Grid.Column="1" ItemsSource="{Binding OpcionesEmparejarIzquierda}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="→" Foreground="#FF9800" FontSize="24"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Margin="0,0,0,10" Height="61">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.MostrandoRespuesta,
+                                                 RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                 Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Derecha — definiciones -->
+                        <ItemsControl Grid.Column="2" ItemsSource="{Binding OpcionesEmparejarDerecha}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="8" Padding="20" Margin="0,0,0,10">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#1F2937"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.MostrandoRespuesta,
+                                                 RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                 Value="True">
+                                                        <Setter Property="Background" Value="#065F46"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding MatchPair}" Foreground="White"
+                                   FontSize="18" TextAlignment="Center"
+                                   TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <!-- botón siguiente -->
+            <Border Grid.Row="2" Background="#111827" Padding="20,15">
+                <Button Style="{StaticResource OrangeButtonStyle}"
+                        Command="{Binding SiguienteCommand}"
+                        Content="{Binding TextoBotonSiguiente}"
+                        HorizontalAlignment="Right" MinWidth="180"/>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="Vazquez_Uribe_Mensa.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Vazquez_Uribe_Mensa.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="768" d:DesignWidth="1106">
+
+    <UserControl.Resources>
+        <!-- paleta -->
+        <SolidColorBrush x:Key="DarkBgBrush" Color="#0D111F"/>
+        <SolidColorBrush x:Key="OrangeBrush" Color="#FFA000"/>
+        <SolidColorBrush x:Key="EntryTextBrush" Color="#E5E7EB"/>
+        <SolidColorBrush x:Key="LabelTextBrush" Color="#9CA3AF"/>
+
+        <!-- btn login -->
+        <Style x:Key="OrangeButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource OrangeBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F57C00"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- labels -->
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <!-- inputs -->
+        <Style x:Key="EntryFieldStyle" TargetType="Control">
+            <Setter Property="Background" Value="#1A2035"/>
+            <Setter Property="Foreground" Value="{StaticResource EntryTextBrush}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#374151"/>
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource DarkBgBrush}">
+        <!-- form -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <!-- logo -->
+            <Border Background="{StaticResource OrangeBrush}" BorderBrush="White" BorderThickness="4" CornerRadius="60" Width="120" Height="120" Margin="0,0,0,50" HorizontalAlignment="Center">
+                <Image Source="/Images/logoMensa.png" Stretch="Uniform" Margin="20"/>
+            </Border>
+
+            <!-- user -->
+            <StackPanel Margin="0,0,0,25" Width="400">
+                <TextBlock Text="Username" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="UsernameTextBox" 
+                         Style="{StaticResource EntryFieldStyle}"
+                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <!-- pass -->
+            <StackPanel Margin="0,0,0,25" Width="400">
+                <TextBlock Text="Password" Style="{StaticResource LabelStyle}"/>
+                <PasswordBox x:Name="PasswordBox" Style="{StaticResource EntryFieldStyle}"/>
+            </StackPanel>
+
+            <!-- submit -->
+            <Button Content="Login" 
+                    Style="{StaticResource OrangeButtonStyle}"
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{Binding ElementName=PasswordBox}"
+                    Width="150" Height="50" HorizontalAlignment="Center" Margin="0,30,0,0"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
