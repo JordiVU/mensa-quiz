@@ -73,6 +73,7 @@ Contraseña: Admin
 ---
 
 ## Estructura del proyecto
+```
 Vazquez_Uribe_Mensa/
 ├── Documents/          # Generación de PDFs con QuestPDF
 ├── Models/             # Entidades y DbContext
@@ -82,6 +83,7 @@ Vazquez_Uribe_Mensa/
 ├── Views/              # UserControls y MainWindow
 ├── Images/             # Recursos gráficos
 └── appsettings.example.json
+```
 
 ---
 
